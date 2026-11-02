@@ -1,9 +1,17 @@
 import React from 'react';
+import imgnapo from '../assets/napo.jpg'; // Importamos una imagen local de respaldo
 
 const CardPizza = ({ name, price, ingredients, img }) => {
   return (
     <div className="card h-100 shadow-sm">
-      <img src={img} className="card-img-top" alt={name} style={{ height: '200px', objectFit: 'cover' }} />
+      <img 
+        src={img} 
+        className="card-img-top" 
+        alt={name} 
+        style={{ height: '200px', objectFit: 'cover' }} 
+
+        onError={(e) => { e.target.src = imgnapo; }}
+      />
       <div className="card-body d-flex flex-column">
         <h5 className="card-title fw-bold text-capitalize">{name}</h5>
         <hr />
