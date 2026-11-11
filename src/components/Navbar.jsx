@@ -1,9 +1,10 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import { Link } from 'react-router-dom';
+import { CartContext } from '../context/CartContext';
 
 const Navbar = () => {
-  const total = 25000;
-  const token = false; 
+  const token = false;
+  const { total } = useContext(CartContext);
   return (
     <nav className="navbar navbar-expand-lg navbar-dark bg-dark px-4">
       <div className="container-fluid">

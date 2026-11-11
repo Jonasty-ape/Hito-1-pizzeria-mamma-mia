@@ -1,7 +1,10 @@
-import React from 'react';
-import imgnapo from '../assets/napo.jpg'; // Importamos una imagen local de respaldo
+import React, { useContext } from 'react';
+import { CartContext } from '../context/CartContext';
+import imgnapo from '../assets/napo.jpg';
 
-const CardPizza = ({ name, price, ingredients, img }) => {
+const CardPizza = ({ id, name, price, ingredients, img }) => {
+  const { addToCart } = useContext(CartContext);
+
   return (
     <div className="card h-100 shadow-sm">
       <img 
@@ -9,7 +12,6 @@ const CardPizza = ({ name, price, ingredients, img }) => {
         className="card-img-top" 
         alt={name} 
         style={{ height: '200px', objectFit: 'cover' }} 
-
         onError={(e) => { e.target.src = imgnapo; }}
       />
       <div className="card-body d-flex flex-column">
@@ -25,7 +27,12 @@ const CardPizza = ({ name, price, ingredients, img }) => {
           <h4 className="fw-bold mb-3">${price.toLocaleString('es-CL')}</h4>
           <div className="d-flex justify-content-between">
             <button className="btn btn-outline-dark btn-sm">Ver Más 👀</button>
-            <button className="btn btn-dark btn-sm">Añadir 🛒</button>
+            <button 
+              className="btn btn-dark btn-sm" 
+              onClick={() => addToCart({ id, name, price, img })}
+            >
+              Añadir 🛒
+            </button>
           </div>
         </div>
       </div>
