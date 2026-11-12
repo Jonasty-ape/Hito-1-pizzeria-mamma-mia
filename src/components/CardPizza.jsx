@@ -1,4 +1,5 @@
 import React, { useContext } from 'react';
+import { Link } from 'react-router-dom'; 
 import { CartContext } from '../context/CartContext';
 import imgnapo from '../assets/napo.jpg';
 
@@ -26,7 +27,7 @@ const CardPizza = ({ id, name, price, ingredients, img }) => {
         <div className="mt-auto text-center">
           <h4 className="fw-bold mb-3">${price.toLocaleString('es-CL')}</h4>
           <div className="d-flex justify-content-between">
-            <button className="btn btn-outline-dark btn-sm">Ver Más 👀</button>
+            <Link to={`/pizza/${id}`} className="btn btn-outline-dark btn-sm">Ver Más 👀</Link>
             <button 
               className="btn btn-dark btn-sm" 
               onClick={() => addToCart({ id, name, price, img })}
