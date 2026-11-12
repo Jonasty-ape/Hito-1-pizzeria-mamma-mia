@@ -1,15 +1,42 @@
-import React, { useContext } from 'react';
+import React, { useContext, useState } from 'react';
 import { CartContext } from '../context/CartContext';
 import { UserContext } from '../context/UserContext';
 
 const Cart = () => {
-  const { cart, increaseCount, decreaseCount, total } = useContext(CartContext);
+  const { cart, increaseCount, decreaseCount, total, setCart } = useContext(CartContext);
   const { token } = useContext(UserContext);
+  const [successMessage, setSuccessMessage] = useState('');
+  const [loading, setLoading] = useState(false);
+
+  const handleCheckout = async () => {
+    setLoading(true);
+    setSuccessMessage('');
+    try {
+      const response = await fetch('http://localhost:5000/api/checkouts', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify({ cart }),
+      });
+      const data = await response.json();
+      if (!response.ok) throw new Error(data.error || 'Error al procesar la compra');
+
+      setSuccessMessage('¡Compra realizada con éxito! 🎉');
+      setCart([]);
+    } catch (error) {
+      alert(error.message);
+    } finally {
+      setLoading(false);
+    }
+  };
 
   return (
     <div className="container my-5">
       <h2 className="mb-4 fw-bold">Detalles del pedido:</h2>
-      {cart.length === 0 ? (
+      {successMessage && <div className="alert alert-success">{successMessage}</div>}
+      {cart.length === 0 && !successMessage ? (
         <p className="text-muted">Tu carrito está vacío.</p>
       ) : (
         <div>
@@ -27,11 +54,18 @@ const Cart = () => {
               </div>
             </div>
           ))}
-          <h3 className="fw-bold mt-4">Total: ${total.toLocaleString('es-CL')}</h3>
-          {}
-          <button className="btn btn-dark mt-3 px-4 py-2" disabled={!token}>
-            {token ? 'Pagar' : 'Inicia sesión para pagar'}
-          </button>
+          {cart.length > 0 && (
+            <>
+              <h3 className="fw-bold mt-4">Total: ${total.toLocaleString('es-CL')}</h3>
+              <button 
+                className="btn btn-dark mt-3 px-4 py-2" 
+                disabled={!token || loading} 
+                onClick={handleCheckout}
+              >
+                {loading ? 'Procesando...' : token ? 'Pagar' : 'Inicia sesión para pagar'}
+              </button>
+            </>
+          )}
         </div>
       )}
     </div>

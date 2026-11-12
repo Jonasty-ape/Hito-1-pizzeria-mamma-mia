@@ -5,17 +5,13 @@ export const CartContext = createContext();
 export const CartProvider = ({ children }) => {
   const [cart, setCart] = useState([]);
 
-
-const addToCart = (pizza) => {
+  const addToCart = (pizza) => {
     const existingPizzaIndex = cart.findIndex((item) => item.id === pizza.id);
-    
     if (existingPizzaIndex >= 0) {
-
       const newCart = [...cart];
       newCart[existingPizzaIndex].count += 1;
       setCart(newCart);
     } else {
-
       setCart([...cart, { ...pizza, count: 1 }]);
     }
   };
@@ -28,7 +24,6 @@ const addToCart = (pizza) => {
     );
   };
 
-
   const decreaseCount = (id) => {
     setCart(
       cart
@@ -39,11 +34,10 @@ const addToCart = (pizza) => {
     );
   };
 
-
   const total = cart.reduce((acc, item) => acc + item.price * item.count, 0);
 
   return (
-    <CartContext.Provider value={{ cart, addToCart, increaseCount, decreaseCount, total }}>
+    <CartContext.Provider value={{ cart, setCart, addToCart, increaseCount, decreaseCount, total }}>
       {children}
     </CartContext.Provider>
   );
